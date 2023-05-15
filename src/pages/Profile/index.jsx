@@ -88,20 +88,17 @@ export function Profile() {
     const server = usePrivateServer();
     const navigate = useNavigate();
 
-    const [availableColors, setAvailableColors] = useState([
-        "",
-    ]);
-
     useEffect(() => {
         const getUser = async () => {
-            const { data } = await server.get(`/users/${user.id}/posts`);
-            const imagesPromise = data.map(post => server.get(post.featured_image));
-            
-            setPosts(data);
+            const userPostsPromise = server.get(`/users/${user.id}/posts`);
+            const userProfilePromise = server.get(`/users`);
+
+            const [{ userPosts }, { userProfile }] = await Promise.all([userPostsPromise, userProfilePromise]);
+            setUser(userProfile);
+            setPosts(userPosts);
         };  
         getUser();
-    }, [server, setPosts, user]);
-
+    }, [server, setPosts, setUser]);
 
     return (
         <Container>
