@@ -2,7 +2,6 @@ import styled from "styled-components";
 import moment from "moment";
 
 const Container = styled.span`
-    position: absolute;
     background-color: white;
     padding: 2px 10px;
     border-radius: 10px;
