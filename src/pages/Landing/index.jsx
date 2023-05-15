@@ -21,7 +21,7 @@ export function Landing() {
 
     }, [server, setUser]);
 
-    if(user) {
+    if(Object.entries(user).length > 0) {
         return <Home />
     } else {
         return <Login />
