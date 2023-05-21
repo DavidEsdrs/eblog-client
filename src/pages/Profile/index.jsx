@@ -122,7 +122,7 @@ export function Profile() {
                         Your posts
                     </H2>
                     <List>
-                        {posts.map(post => (
+                        {posts?.map(post => (
                             <li key={post.id}>
                                 <PostItem onClick={() => navigate(`/post/${post.id}`, { state: {...post} })}>
                                     <PostTitle>
