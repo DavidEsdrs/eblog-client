@@ -90,12 +90,11 @@ export function Profile() {
 
     useEffect(() => {
         const getUser = async () => {
-            const userPostsPromise = server.get(`/users/${user.id}/posts`);
-            const userProfilePromise = server.get(`/users`);
+            const userProfile = await server.get(`/users`);
+            const userPosts = await server.get(`/users/${user.id}/posts`);
 
-            const [{ userPosts }, { userProfile }] = await Promise.all([userPostsPromise, userProfilePromise]);
-            setUser(userProfile);
-            setPosts(userPosts);
+            setPosts(userPosts.data);
+            setUser(userProfile.data);
         };  
         getUser();
     }, [server, setPosts, setUser]);
