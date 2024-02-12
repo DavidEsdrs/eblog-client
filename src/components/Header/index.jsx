@@ -35,7 +35,7 @@ export function Header() {
                 <span>e</span>blog
             </Logo>
             <Navigation>
-                <Link to={"/profile"} replace>
+                <Link to={"/profile"}>
                     <AiOutlineUser />
                 </Link>
             </Navigation>

@@ -40,9 +40,7 @@ export function Post({ id, title, featured_image, summary, created_at, content, 
             setFeaturedImageUrl(URL.createObjectURL(data));
         }
         getImageUrl();
-    }, []);
-
-    
+    }, [server, setFeaturedImageUrl]);
 
     return (
         <Container onClick={() => navigate(`/post/${id}`, { state: { id, title, featuredImageUrl, summary, created_at, content, creator } })}>

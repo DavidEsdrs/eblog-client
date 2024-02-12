@@ -70,27 +70,27 @@ const Title = styled.h1`
     font-size: ${(({ theme }) => theme.sizes.title_size)};
 `;
 
-export function Page({ id, title, featuredImageUrl, summary, created_at, content, creator }) {
-    const [richText, setRickText] = useState("");
-    const { accessToken } = useAuth();
-    const { state } = useLocation();
+export function Page() {
+    const [post, setPost] = useState();
+    const [featuredImageUrl, setFeaturedImageUrl] = useState();
+    const location = useLocation();
     const server = usePrivateServer();
 
     useEffect(() => {
-        const fetchContent = async () => {
-            const { data } = await server.get(state?.content);
-
+        const getPost = async () => {
+            const { data } = await server.get(`/posts/${location.state.id}`);
             if(!data.error) {
-                setRickText(data.content);
+                setPost(data);
             }
+            const { data: content } = await server.get(`/posts/${location.state.id}/image`, {
+                responseType: "blob"
+            });
+            const url = URL.createObjectURL(content);
+            console.log({url})
+            setFeaturedImageUrl(url);
         };
-
-        // const fetchImage = async () => {
-        //     const { data } = await 
-        // }
-        fetchContent();
-        // fetchImage();
-    }, [server, setRickText, state]);
+        getPost();
+    }, [server, setPost, location]);
 
     return (
         <Container>
@@ -98,25 +98,25 @@ export function Page({ id, title, featuredImageUrl, summary, created_at, content
             <Main>
                 <Article>
                     <Info>
-                        <FeaturedImage src={state.featuredImageUrl ?? featuredImageUrl} />
+                        <FeaturedImage src={featuredImageUrl} />
                         <header>
                             <Title>
-                                {state?.title ?? title}
+                                {post?.title}
                             </Title>
                         </header>
                         <Summary>
-                            {state.summary ?? summary}
+                            {post?.summary}
                         </Summary>
                         <Author className="author">
                             By <a rel="author"> 
                                 <b>
-                                    {state?.creator.email} 
+                                    {post?.creator?.email} 
                                 </b>
-                            </a> on {moment(state?.created_at).format("MMM Do, YYYY")}
+                            </a> on {moment(post?.created_at).format("MMM Do, YYYY")}
                         </Author>
                     </Info>
                     <Content>
-                        {parse(richText)}
+                        {post && parse(post.content)}
                     </Content>
                 </Article>
             </Main>
